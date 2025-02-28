@@ -1,14 +1,16 @@
-import { proto } from "../../WAProto";
-import { makeLibSignalRepository } from "../Signal/libsignal";
+import { proto } from "../../WAProto/index.js";
+import { makeLibSignalRepository } from "../Signal/libsignal.js";
 import {
   AuthenticationState,
   MediaType,
   SocketConfig,
   WAVersion
 } from "../Types";
-import { Browsers } from "../Utils";
-import logger from "../Utils/logger";
-import { version } from "./baileys-version";
+import { Browsers } from "../Utils/index.js";
+import logger from "../Utils/logger.js";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import path from "path";
 export const UNAUTHORIZED_CODES = [401, 403, 419];
 export const DEFAULT_ORIGIN = "https://web.whatsapp.com";
 export const DEF_CALLBACK_PREFIX = "CB:";
@@ -24,6 +26,8 @@ export const URL_REGEX =
 export const WA_CERT_DETAILS = {
   SERIAL: 0
 };
+const require = createRequire(import.meta.url);
+const version: number[] = require(path.join(fileURLToPath(import.meta.url), "baileys-version.json")).version;
 export const PROCESSABLE_HISTORY_TYPES = [
   proto.Message.HistorySyncNotification.HistorySyncType.INITIAL_BOOTSTRAP,
   proto.Message.HistorySyncNotification.HistorySyncType.PUSH_NAME,

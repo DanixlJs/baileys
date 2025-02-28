@@ -12,11 +12,11 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
-      "ES2024",
+      "ESNext",
       "ESNext.Array",
       "DOM"
     ],
-    "outDir": "build",
+    "outDir": "lib",
     "allowJs": false,
     "checkJs": false
   },

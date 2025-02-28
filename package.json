@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "type": "module",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "scripts": {
     "generate:waproto": "pbjs -t static-module -w es6 -o ./WAProto/index.js ./WAProto/WAProto.proto && pbts -o ./WAProto/index.d.ts ./WAProto/index.js",
     "generate:wasignalproto": "pbjs -t static-module -w es6 -o ./WASignalGroup/GroupProtocol.js ./WASignalGroup/group.proto"
   },
+  "files": [
+    "lib/*",
+    "WAProto/*",
+    "WASignalGroup/*.js"
+  ],
   "dependencies": {
     "@adiwajshing/keyed-db": "0.2.4",
     "@cacheable/node-cache": "1.5.2",
