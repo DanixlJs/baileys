@@ -4,6 +4,7 @@
   "type": "module",
   "main": "lib/index.js",
   "scripts": {
+    "build:all": "tsc && typedoc",
     "generate:waproto": "pbjs -t static-module -w es6 -o ./WAProto/index.js ./WAProto/WAProto.proto && pbts -o ./WAProto/index.d.ts ./WAProto/index.js",
     "generate:wasignalproto": "pbjs -t static-module -w es6 -o ./WASignalGroup/GroupProtocol.js ./WASignalGroup/group.proto"
   },

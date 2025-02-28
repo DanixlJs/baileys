@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { DEFAULT_ORIGIN } from "../../Defaults";
+import { DEFAULT_ORIGIN } from "../../Defaults/index.js";
 import { AbstractSocketClient } from "./types";
 export class WebSocketClient extends AbstractSocketClient {
   protected socket: WebSocket | null = null;

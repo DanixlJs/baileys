@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "noImplicitAny": false,
     "target": "ESNext",
     "module": "ESNext",
@@ -21,8 +22,9 @@
     "checkJs": false
   },
   "include": [
-    "./src/**/*.ts"
-, "src/Socket/business.ts"  ],
+    "./src/**/*.ts",
+    "src/Socket/business.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
