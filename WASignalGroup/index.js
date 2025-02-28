@@ -1,5 +1,12 @@
-module.exports.GroupSessionBuilder = require('./group_session_builder')
-module.exports.SenderKeyDistributionMessage = require('./sender_key_distribution_message')
-module.exports.SenderKeyRecord = require('./sender_key_record')
-module.exports.SenderKeyName = require('./sender_key_name')
-module.exports.GroupCipher = require('./group_cipher')
+import GroupSessionBuilder from "./group_session_builder.js";
+import SenderKeyDistributionMessage from "./sender_key_distribution_message.js";
+import SenderKeyRecord from "./sender_key_record.js";
+import SenderKeyName from "./sender_key_name.js";
+import GroupCipher from "./group_cipher.js";
+export {
+  GroupSessionBuilder,
+  SenderKeyDistributionMessage,
+  SenderKeyRecord,
+  SenderKeyName,
+  GroupCipher
+};

@@ -1,69 +1,55 @@
-// vim: ts=4:sw=4:expandtab
-
-/*
- * jobQueue manages multiple queues indexed by device to serialize
- * session io ops on the database.
- */
-'use strict';
-
-
-const _queueAsyncBuckets = new Map();
-const _gcLimit = 10000;
-
-async function _asyncQueueExecutor(queue, cleanup) {
-    let offt = 0;
+const asyncTaskQueues = new Map();
+const GARBAGE_COLLECTION_LIMIT = 10000;
+async function processQueue(taskQueue, cleanupCallback) {
+    let offset = 0;
     while (true) {
-        let limit = Math.min(queue.length, _gcLimit); // Break up thundering hurds for GC duty.
-        for (let i = offt; i < limit; i++) {
-            const job = queue[i];
+        let executionLimit = Math.min(taskQueue.length, GARBAGE_COLLECTION_LIMIT);
+        for (let i = offset; i < executionLimit; i++) {
+            const task = taskQueue[i];
             try {
-                job.resolve(await job.awaitable());
-            } catch (e) {
-                job.reject(e);
+                task.resolve(await task.awaitable());
+            } catch (error) {
+                task.reject(error);
             }
         }
-        if (limit < queue.length) {
-            /* Perform lazy GC of queue for faster iteration. */
-            if (limit >= _gcLimit) {
-                queue.splice(0, limit);
-                offt = 0;
+        if (executionLimit < taskQueue.length) {
+            if (executionLimit >= GARBAGE_COLLECTION_LIMIT) {
+                taskQueue.splice(0, executionLimit);
+                offset = 0;
             } else {
-                offt = limit;
+                offset = executionLimit;
             }
         } else {
             break;
         }
     }
-    cleanup();
+    cleanupCallback();
 }
 
-module.exports = function (bucket, awaitable) {
-    /* Run the async awaitable only when all other async calls registered
-     * here have completed (or thrown).  The bucket argument is a hashable
-     * key representing the task queue to use. */
-    if (!awaitable.name) {
-        // Make debuging easier by adding a name to this function.
-        Object.defineProperty(awaitable, 'name', { writable: true });
-        if (typeof bucket === 'string') {
-            awaitable.name = bucket;
+export default function executeTask(bucketKey, asyncFunction) {
+    if (!asyncFunction.name) {
+        Object.defineProperty(asyncFunction, 'name', {
+            writable: true
+        });
+        if (typeof bucketKey === 'string') {
+            asyncFunction.name = bucketKey;
         } else {
-            console.warn("Unhandled bucket type (for naming):", typeof bucket, bucket);
+            console.warn("Uncontrolled deposit key type (for denomination):", typeof bucketKey, bucketKey);
         }
     }
-    let inactive;
-    if (!_queueAsyncBuckets.has(bucket)) {
-        _queueAsyncBuckets.set(bucket, []);
-        inactive = true;
+    let isQueueInactive;
+    if (!asyncTaskQueues.has(bucketKey)) {
+        asyncTaskQueues.set(bucketKey, []);
+        isQueueInactive = true;
     }
-    const queue = _queueAsyncBuckets.get(bucket);
-    const job = new Promise((resolve, reject) => queue.push({
-        awaitable,
+    const taskQueue = asyncTaskQueues.get(bucketKey);
+    const taskPromise = new Promise((resolve, reject) => taskQueue.push({
+        awaitable: asyncFunction,
         resolve,
         reject
     }));
-    if (inactive) {
-        /* An executor is not currently active; Start one now. */
-        _asyncQueueExecutor(queue, () => _queueAsyncBuckets.delete(bucket));
+    if (isQueueInactive) {
+        processQueue(taskQueue, () => asyncTaskQueues.delete(bucketKey));
     }
-    return job;
-};
+    return taskPromise;
+}

@@ -1,13 +1,11 @@
-import { DEFAULT_CONNECTION_CONFIG } from '../Defaults'
-import { UserFacingSocketConfig } from '../Types'
-import { makeBusinessSocket } from './business'
+import { DEFAULT_CONNECTION_CONFIG } from "../Defaults/index.js";
+import { UserFacingSocketConfig } from "../Types";
+import { makeBusinessSocket } from "./business.js";
 
-// export the last socket layer
-const makeWASocket = (config: UserFacingSocketConfig) => (
-	makeBusinessSocket({
-		...DEFAULT_CONNECTION_CONFIG,
-		...config
-	})
-)
+const makeWASocket = (config: UserFacingSocketConfig) =>
+  makeBusinessSocket({
+    ...DEFAULT_CONNECTION_CONFIG,
+    ...config
+  });
 
-export default makeWASocket
+export default makeWASocket;

@@ -1,21 +1,29 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "CommonJS",
-    "experimentalDecorators": true,
-    "allowJs": false,
-    "checkJs": false,
-    "outDir": "lib",
+    "noImplicitAny": false,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "strict": false,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
-    "noImplicitThis": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "lib": ["es2020", "esnext.array", "DOM"]
+    "lib": [
+      "ES2024",
+      "ESNext.Array",
+      "DOM"
+    ],
+    "outDir": "build",
+    "allowJs": false,
+    "checkJs": false
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "src/Tests/*", "src/Binary/GenerateStatics.ts"]
+  "include": [
+    "./src/**/*.ts"
+, "src/Socket/business.ts"  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

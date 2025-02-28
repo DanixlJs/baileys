@@ -1,21 +1,22 @@
-const curve = require('libsignal/src/curve');
-const nodeCrypto = require('crypto');
-
-exports.generateSenderKey = function() {
-    return nodeCrypto.randomBytes(32);
+import {
+    generateKeyPair
+} from "libsignal/src/curve";
+import {
+    randomBytes,
+    randomInt
+} from "crypto";
+export function generateSenderKey() {
+    return randomBytes(32);
 }
-
-exports.generateSenderKeyId = function() {
-    return nodeCrypto.randomInt(2147483647);
+export function generateSenderKeyId() {
+    return randomInt(2147483647);
 }
-
-exports.generateSenderSigningKey = function(key) {
+export function generateSenderSigningKey(key) {
     if (!key) {
-        key = curve.generateKeyPair();
+        key = generateKeyPair();
     }
-
     return {
         public: key.pubKey,
         private: key.privKey,
     };
-} 
+}
